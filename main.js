@@ -18,9 +18,10 @@ let gojyuon = [   // 五十音の文字用の画像ファイル名を配列に�
   [ "char40.png", "tray40.png" ], [ "char41.png", "tray41.png" ], [ "char42.png", "tray42.png" ], [ "char43.png", "tray43.png" ], [ "char44.png", "tray44.png" ],
   [ "char45.png", "tray45.png" ], [ "char46.png", "tray46.png" ], [ "char47.png", "tray47.png" ], [ "char48.png", "tray48.png" ], [ "char49.png", "tray49.png" ]
 ];
-var rectChar = [];
-var rectTray = [];
-var useChar = [0, 0, 0, 0, 0];
+var rectChar = [];  // 落下用ファイル名の配列
+var rectTray = [];  // 受け皿用ファイル名の配列
+var useChar = [0, 0, 0, 0, 0];  // 同じランダム数にならないための変数
+var fin0 = fin1 = fin2 = fin3 = fin4 = 0;   // 全部正解したかを判定する変数
 
 // 問題作成
 akasatanaNo = akasatana[ Math.floor(Math.random(akasatana) * akasatana.length) ];   // あかさたなのどの列を問題にするか決める
@@ -128,8 +129,10 @@ for (let i=1; i<5; i++) {
   ]);
 }
 
+
 Render.run(render);   // render開始
 Engine.run(engine);   // engne開始
+var startTime = new Date();   // 開始時刻記録
 
 // マウスを使う処理
 let MouseConstraint = Matter.MouseConstraint,
@@ -158,23 +161,33 @@ Matter.Events.on(engine, 'collisionStart', function(event) {
     // BodyBがtrayであることを確認
     let nameBodyB = pair.bodyB.render.sprite.texture.slice(0, 4)  // file名の頭4文字を取得
     if ( nameBodyB == "tray" ) {
-      let numBodyA = pair.bodyA.render.sprite.texture.slice(-6)  // file名から番号を取得
-      let numBodyB = pair.bodyB.render.sprite.texture.slice(-6)  // file名から番号を取得
+      let numBodyA = pair.bodyA.render.sprite.texture.slice(10, 11)  // file名から番号を取得
+      let numBodyB = pair.bodyB.render.sprite.texture.slice(10, 11)  // file名から番号を取得
       if ( numBodyA == numBodyB) {  // 正解だった場合good.pngを表示
-          let x = pair.bodyB.position.x
-          let good = Bodies.rectangle( x, 750, 110, 110, {
-            isStatic: true ,
-            render: {
-              sprite: {
-                texture: "good.png"
-              }
+        if (numBodyA == 0 || numBodyA == 5) fin0 = 1;   // 0番目問題終了
+        if (numBodyA == 1 || numBodyA == 6) fin1 = 1;   // 0番目問題終了
+        if (numBodyA == 2 || numBodyA == 7) fin2 = 1;   // 0番目問題終了
+        if (numBodyA == 3 || numBodyA == 8) fin3 = 1;   // 0番目問題終了
+        if (numBodyA == 4 || numBodyA == 9) fin4 = 1;   // 0番目問題終了
+        let x = pair.bodyB.position.x   // x座標の取得
+        let good = Bodies.rectangle( x, 750, 110, 110, {
+        isStatic: true ,
+          render: {
+            sprite: {
+              texture: "good.png"
             }
-          });
-          World.add(world, good);
+          }
+        });
+        World.add(world, good);
+        if (fin0==1 && fin1==1 && fin2==1 && fin3==1 && fin4==1) {
+          var endTime = new Date();
+          var time = (endTime - startTime) / 1000 + "Sec";
+          alert(time);
+        }
       } else {
         let x = pair.bodyB.position.x
         let bad = Bodies.rectangle( x, 750, 110, 110, {
-          isStatic: true ,
+        isStatic: true ,
           render: {
             sprite: {
               texture: "bad.png"
