@@ -63,6 +63,7 @@ var char = [];
 for (let i=0; i<5; i++) {
   char[i] = Bodies.rectangle(190*i+110, 80, 110, 110, {
     frictionAir: 0.3,
+    inertia: Infinity,
     render: {
       sprite: {
         texture: "char/" + rectChar[i]
