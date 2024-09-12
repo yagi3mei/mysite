@@ -108,16 +108,10 @@ for (let i=0; i<5; i++) {
 
 // 床を作る
 let floor = Bodies.rectangle(400 * scaleFactor, 800 * scaleFactor, 1110 * scaleFactor, 40 * scaleFactor, { isStatic: true });
-  isStatic: true
-});
 // 左の壁を作る
 let wallLeft = Bodies.rectangle(10 * scaleFactor, 0, 30 * scaleFactor, 1600 * scaleFactor, { isStatic: true });
-  isStatic: true
-});
 // 右の壁を作る
 let wallRight = Bodies.rectangle(970 * scaleFactor, 0, 30 * scaleFactor, 1600 * scaleFactor, { isStatic: true });
-  isStatic: true
-});
 // パーティションを４つ作る
 var shortWall = [];
 for (let i=1; i<5; i++) {
