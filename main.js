@@ -65,10 +65,38 @@ let engine = Engine.create(), // 物理演算エンジン
     }
 });
 
+// ここから追加したところ
+let charWidth = 130;  // PC用のオブジェクト幅
+let charHeight = 130; // PC用のオブジェクト高さ
+
+// スマホの場合、サイズを半分に変更
+if (window.innerWidth <= 768) {  // スマホサイズの基準を設定（ここでは768px以下をスマホと判定）
+  charWidth = 65;
+  charHeight = 65;
+}
+
+// 落下するオブジェクトを作成
+var char = [];
+for (let i = 0; i < 5; i++) {
+  char[i] = Bodies.rectangle(190 * i + 110, 80, charWidth, charHeight, {
+    frictionAir: 0.3,
+    inertia: Infinity,
+    render: {
+      sprite: {
+        texture: "char/" + rectChar[i],
+        xScale: (window.innerWidth <= 768) ? 0.5 : 1,  // スマホならスケールを半分に
+        yScale: (window.innerWidth <= 768) ? 0.5 : 1   // スマホならスケールを半分に
+      }
+    }
+  });
+}
+
+/*
 // 四角の落下用オブジェクト作成
 var char = [];
 for (let i=0; i<5; i++) {
-  char[i] = Bodies.rectangle(190 * i * scaleFactor + 110 * scaleFactor, 80 * scaleFactor, 110 * scaleFactor, 110 * scaleFactor, {
+    //char[i] = Bodies.rectangle(190 * i * scaleFactor + 110 * scaleFactor, 80 * scaleFactor, 110 * scaleFactor, 110 * scaleFactor, {
+    char[i] = Bodies.rectangle(50 * i * scaleFactor + 50 * scaleFactor, 80 * scaleFactor, 110 * scaleFactor, 110 * scaleFactor, {
     frictionAir: 0.3,
     inertia: Infinity,
     render: {
@@ -78,6 +106,7 @@ for (let i=0; i<5; i++) {
     }
   });
 }
+*/
 
 // 落下用ひらがな図形を追加
 for (let i=0; i<5; i++) {
@@ -86,7 +115,23 @@ for (let i=0; i<5; i++) {
   ]);
 }
 
+//　ここから追加したところ
+// 受け皿オブジェクトも同様にサイズを変更
+var tray = [];
+for (let i = 0; i < 5; i++) {
+  tray[i] = Bodies.rectangle(190 * i + 110, 690, charWidth, charHeight, {
+    isStatic: true,
+    render: {
+      sprite: {
+        texture: "tray/" + rectTray[i],
+        xScale: (window.innerWidth <= 768) ? 0.5 : 1,  // スマホならスケールを半分に
+        yScale: (window.innerWidth <= 768) ? 0.5 : 1   // スマホならスケールを半分に
+      }
+    }
+  });
+}
 
+/*
 // 受け皿用オブジェクトを作成
 var tray = [];
 for (let i=0; i<5; i++) {
@@ -99,12 +144,15 @@ for (let i=0; i<5; i++) {
     }
   });
 }
+*/
+
 // 受け皿用図形を追加
 for (let i=0; i<5; i++) {
   World.add(world, [
     tray[i],
   ]);
 }
+
 
 // 床を作る
 let floor = Bodies.rectangle(400 * scaleFactor, 800 * scaleFactor, 1110 * scaleFactor, 40 * scaleFactor, { isStatic: true });
