@@ -46,22 +46,57 @@ let Engine = Matter.Engine,
 let engine = Engine.create(), // 物理演算エンジン
     world = engine.world;
 
-// create Render
-let render = Render.create({  // レンダリング
+    // デバイスの幅を取得し、スケーリングを決定
+    let deviceWidth = window.innerWidth;
+    let deviceHeight = window.innerHeight;
+
+    // スマホ用のスケーリング (スマホの場合はサイズを小さくする)
+    let scaleFactor = (deviceWidth < 600) ? 0.5 : 1; // 600px以下の幅の場合、サイズを半分にする
+
+    // create Render (デバイスのスケールに基づいて幅と高さを設定)
+    let render = Render.create({  // レンダリング
     element: document.body,
     engine: engine,
     options: {
-      width: 1000,   // 幅
-      height: 800,  // 高さ
+      width: 1000 * scaleFactor,   // スケーリングされた幅
+      height: 800 * scaleFactor,   // スケーリングされた高さ
       background: '#eeeeee',  // 背景色
       wireframes: false   // ワイヤーフレームモードオフ
     }
 });
 
+// ここから追加したところ
+let charWidth = 130;  // PC用のオブジェクト幅
+let charHeight = 130; // PC用のオブジェクト高さ
+
+// スマホの場合、サイズを半分に変更
+if (window.innerWidth <= 768) {  // スマホサイズの基準を設定（ここでは768px以下をスマホと判定）
+  charWidth = 65;
+  charHeight = 65;
+}
+
+// 落下するオブジェクトを作成
+var char = [];
+for (let i = 0; i < 5; i++) {
+  char[i] = Bodies.rectangle(190 * i + 110, 80, charWidth, charHeight, {
+    frictionAir: 0.3,
+    inertia: Infinity,
+    render: {
+      sprite: {
+        texture: "char/" + rectChar[i],
+        xScale: (window.innerWidth <= 768) ? 0.5 : 1,  // スマホならスケールを半分に
+        yScale: (window.innerWidth <= 768) ? 0.5 : 1   // スマホならスケールを半分に
+      }
+    }
+  });
+}
+
+/*
 // 四角の落下用オブジェクト作成
 var char = [];
 for (let i=0; i<5; i++) {
-  char[i] = Bodies.rectangle(190*i+110, 80, 110, 110, {
+    //char[i] = Bodies.rectangle(190 * i * scaleFactor + 110 * scaleFactor, 80 * scaleFactor, 110 * scaleFactor, 110 * scaleFactor, {
+    char[i] = Bodies.rectangle(50 * i * scaleFactor + 50 * scaleFactor, 80 * scaleFactor, 110 * scaleFactor, 110 * scaleFactor, {
     frictionAir: 0.3,
     inertia: Infinity,
     render: {
@@ -71,6 +106,7 @@ for (let i=0; i<5; i++) {
     }
   });
 }
+*/
 
 // 落下用ひらがな図形を追加
 for (let i=0; i<5; i++) {
@@ -79,12 +115,28 @@ for (let i=0; i<5; i++) {
   ]);
 }
 
+//　ここから追加したところ
+// 受け皿オブジェクトも同様にサイズを変更
+var tray = [];
+for (let i = 0; i < 5; i++) {
+  tray[i] = Bodies.rectangle(190 * i + 110, 690, charWidth, charHeight, {
+    isStatic: true,
+    render: {
+      sprite: {
+        texture: "tray/" + rectTray[i],
+        xScale: (window.innerWidth <= 768) ? 0.5 : 1,  // スマホならスケールを半分に
+        yScale: (window.innerWidth <= 768) ? 0.5 : 1   // スマホならスケールを半分に
+      }
+    }
+  });
+}
 
+/*
 // 受け皿用オブジェクトを作成
 var tray = [];
 for (let i=0; i<5; i++) {
-  tray[i] = Bodies.rectangle(190*i+110, 690, 110, 110, {
-    isStatic: true ,
+  tray[i] = Bodies.rectangle(190 * i * scaleFactor + 110 * scaleFactor, 690 * scaleFactor, 110 * scaleFactor, 110 * scaleFactor, {
+    isStatic: true,
     render: {
       sprite: {
         texture: "tray/" + rectTray[i]
@@ -92,6 +144,8 @@ for (let i=0; i<5; i++) {
     }
   });
 }
+*/
+
 // 受け皿用図形を追加
 for (let i=0; i<5; i++) {
   World.add(world, [
@@ -99,18 +153,13 @@ for (let i=0; i<5; i++) {
   ]);
 }
 
+
 // 床を作る
-let floor = Bodies.rectangle(400, 800, 1110, 40, {
-  isStatic: true
-});
+let floor = Bodies.rectangle(400 * scaleFactor, 800 * scaleFactor, 1110 * scaleFactor, 40 * scaleFactor, { isStatic: true });
 // 左の壁を作る
-let wallLeft = Bodies.rectangle(10, 0, 30, 1600, {
-  isStatic: true
-});
+let wallLeft = Bodies.rectangle(10 * scaleFactor, 0, 30 * scaleFactor, 1600 * scaleFactor, { isStatic: true });
 // 右の壁を作る
-let wallRight = Bodies.rectangle(970, 0, 30, 1600, {
-  isStatic: true
-});
+let wallRight = Bodies.rectangle(970 * scaleFactor, 0, 30 * scaleFactor, 1600 * scaleFactor, { isStatic: true });
 // パーティションを４つ作る
 var shortWall = [];
 for (let i=1; i<5; i++) {
