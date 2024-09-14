@@ -8,3 +8,21 @@ h1 {
   color: rgb(255, 0, 0);
   text-align: left;
 }
+
+/* 通常のスタイル */
+.container {
+    width: 1000px;
+    margin: 0 auto;
+}
+
+/* スマホ対応のスタイル */
+@media screen and (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding: 0 10px;
+    }
+    canvas {
+        width: 100%;  /* キャンバスを画面幅に合わせる */
+        height: auto; /* アスペクト比を保つ */
+    }
+}
