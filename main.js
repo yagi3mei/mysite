@@ -1,24 +1,25 @@
 /***************************************
  作成者：柳浦　作成日：2023/08/11
-              修正日：2024/09/20
+              修正日：2024/09/17
  外国人がひらがなを勉強するためのソフト
  落ちる間に正しいところへマウスで移動する
 ***************************************/
 
 // いろいろな初期化
-let akasatana = [ 0, 5, 10, 15, 20, 25, 30, 35, 40, 45 ];   // あかさたな列の先頭の配列番号（後でランダム問題作成のため）
-let gojyuon = [   // 五十音の文字用の画像ファイル名を配列に入れる（charは落下用、trayは受け皿用）
-  [ "char00.png", "tray00.png" ], [ "char01.png", "tray01.png" ], [ "char02.png", "tray02.png" ], [ "char03.png", "tray03.png" ], [ "char04.png", "tray04.png" ],
-  [ "char05.png", "tray05.png" ], [ "char06.png", "tray06.png" ], [ "char07.png", "tray07.png" ], [ "char08.png", "tray08.png" ], [ "char09.png", "tray09.png" ],
-  [ "char10.png", "tray10.png" ], [ "char11.png", "tray11.png" ], [ "char12.png", "tray12.png" ], [ "char13.png", "tray13.png" ], [ "char14.png", "tray14.png" ],
-  [ "char15.png", "tray15.png" ], [ "char16.png", "tray16.png" ], [ "char17.png", "tray17.png" ], [ "char18.png", "tray18.png" ], [ "char19.png", "tray19.png" ],
-  [ "char20.png", "tray20.png" ], [ "char21.png", "tray21.png" ], [ "char22.png", "tray22.png" ], [ "char23.png", "tray23.png" ], [ "char24.png", "tray24.png" ],
-  [ "char25.png", "tray25.png" ], [ "char26.png", "tray26.png" ], [ "char27.png", "tray27.png" ], [ "char28.png", "tray28.png" ], [ "char29.png", "tray29.png" ],
-  [ "char30.png", "tray30.png" ], [ "char31.png", "tray31.png" ], [ "char32.png", "tray32.png" ], [ "char33.png", "tray33.png" ], [ "char34.png", "tray34.png" ],
-  [ "char35.png", "tray35.png" ], [ "char36.png", "tray36.png" ], [ "char37.png", "tray37.png" ], [ "char38.png", "tray38.png" ], [ "char39.png", "tray39.png" ],
-  [ "char40.png", "tray40.png" ], [ "char41.png", "tray41.png" ], [ "char42.png", "tray42.png" ], [ "char43.png", "tray43.png" ], [ "char44.png", "tray44.png" ],
-  [ "char45.png", "tray45.png" ], [ "char46.png", "tray46.png" ], [ "char47.png", "tray47.png" ], [ "char48.png", "tray48.png" ], [ "char49.png", "tray49.png" ]
-];
+// 0から130まで、5つ置きの数値を配列に追加
+let akasatana = [];
+for (let i = 0; i < 130; i += 5) {
+  akasatana.push(i);
+}
+// char000.png～char129.png と tray000.png～tray129.png を生成して gojyuon 配列に追加
+let gojyuon = [];
+for (let i = 0; i < 130; i++) {
+  // 3桁にフォーマットされた番号を作成
+  let fileNumber = String(i).padStart(3, '0');
+
+  // char と tray のファイル名を配列に追加
+  gojyuon.push([`char${fileNumber}.png`, `tray${fileNumber}.png`]);
+}
 var rectChar = [];  // 落下用ファイル名の配列
 var rectTray = [];  // 受け皿用ファイル名の配列
 var useChar = [0, 0, 0, 0, 0];  // 同じランダム数にならないための変数
@@ -168,8 +169,8 @@ Matter.Events.on(engine, 'collisionStart', function(event) {
     // BodyBがtrayであることを確認
     let nameBodyB = pair.bodyB.render.sprite.texture.slice(0, 4)  // file名の頭4文字を取得
     if ( nameBodyB == "tray" ) {
-      let numBodyA = pair.bodyA.render.sprite.texture.slice(10, 11)  // file名から番号を取得
-      let numBodyB = pair.bodyB.render.sprite.texture.slice(10, 11)  // file名から番号を取得
+      let numBodyA = pair.bodyA.render.sprite.texture.slice(10, 12)  // file名から番号を取得
+      let numBodyB = pair.bodyB.render.sprite.texture.slice(10, 12)  // file名から番号を取得
       if ( numBodyA == numBodyB) {  // 正解だった場合good.pngを表示
         if (numBodyA == 0 || numBodyA == 5) fin0 = 1;   // 0番目問題終了
         if (numBodyA == 1 || numBodyA == 6) fin1 = 1;   // 0番目問題終了
