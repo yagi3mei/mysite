@@ -1,5 +1,6 @@
 /***************************************
  作成者：柳浦　作成日：2023/08/11
+              修正日：2024/09/20
  外国人がひらがなを勉強するためのソフト
  落ちる間に正しいところへマウスで移動する
 ***************************************/
@@ -43,7 +44,12 @@ let Engine = Matter.Engine,
     Bodies = Matter.Bodies;
 
 // create Engine
-let engine = Engine.create(), // 物理演算エンジン
+// エンジンを作成するときに timing の設定を調整する
+let engine = Engine.create({
+  timing: {
+    timeScale: 0.8 // これを 1.0 より小さくするとシミュレーション速度が落ち、精度が上がる
+  }
+});
     world = engine.world;
 
 // create Render
