@@ -190,7 +190,10 @@ Matter.Events.on(engine, 'collisionStart', function(event) {
         if (fin0==1 && fin1==1 && fin2==1 && fin3==1 && fin4==1) {
           var endTime = new Date();
           var time = (endTime - startTime) / 1000 + "Sec";
-          alert(time);
+          setTimeout(() => {
+            alert(time);  // 実行したい処理
+          }, 1000);     // 1秒待つ
+
         }
       } else {
         let x = pair.bodyB.position.x
