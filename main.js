@@ -169,8 +169,8 @@ Matter.Events.on(engine, 'collisionStart', function(event) {
     // BodyBがtrayであることを確認
     let nameBodyB = pair.bodyB.render.sprite.texture.slice(0, 4)  // file名の頭4文字を取得
     if ( nameBodyB == "tray" ) {
-      let numBodyA = pair.bodyA.render.sprite.texture.slice(10, 12)  // file名から番号を取得
-      let numBodyB = pair.bodyB.render.sprite.texture.slice(10, 12)  // file名から番号を取得
+      let numBodyA = pair.bodyA.render.sprite.texture.slice(11, 12)  // file名から番号を取得
+      let numBodyB = pair.bodyB.render.sprite.texture.slice(11, 12)  // file名から番号を取得
       if ( numBodyA == numBodyB) {  // 正解だった場合good.pngを表示
         if (numBodyA == 0 || numBodyA == 5) fin0 = 1;   // 0番目問題終了
         if (numBodyA == 1 || numBodyA == 6) fin1 = 1;   // 0番目問題終了
